@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="ConsoleApp1/Example1.csproj" />
+  <Project Path="IndieGameStillWorking/IndieGameStillWorking.csproj" />
+  <Project Path="Practice/Practice.csproj" Id="4881393e-270c-4a31-a258-244378262c01" />
+</Solution>
