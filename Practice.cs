@@ -1,268 +1,64 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Threading;
-using System.Web;
 
-class Pratice
+class Prorgam
 {
-    static Random rnd = new Random();
-
     static void Main()
     {
-        MainMenu();
-    }
-    static void MainMenu()
-    {
+        int rows = 5;
+        int cols = 5;
+        int count = 25;
+
+        string[,] seats = new string[rows, cols];
+
         while (true)
         {
-            Console.WriteLine("GUESSING GAME");
-            Console.WriteLine("1. Easy (1 to 20)");
-            Console.WriteLine("2. Medium (1 to 50)");
-            Console.WriteLine("3 Hard (1 to 100)");
-            Console.WriteLine();
-            Console.Write("Enter difficulty: ");
-            int choice = Convert.ToInt32(Console.ReadLine());
+            Console.Clear();
 
-            switch (choice)
+            Console.WriteLine("=====Seating=====");
+            for (int i = 0;i < rows; i++)
             {
-                case 1:
-                    Easy();
-                    break;
-                case 2:
-                    Medium();
-                    break;
-                case 3:
-                    Hard();
-                    break;
-                default:
-                    Console.WriteLine("Invalid input");
-                    break;
-            }
-        }
-    }
+                for (int j = 0;j < cols; j++)
+                {
+                    char rowLetter = (char)('A' + i);
+                    int colNumber = j + 1;
 
-    static void Easy()
-    {
-        int count = 0;
-        const int MIN = 1;
-        const int MAX = 20;
-
-        int secretNum = rnd.Next(MIN, MAX + 1);
-        bool running = true;
-        Console.WriteLine("DIFFICULTY: EASY");
-
-        while (running)
-        {
-           try
-            {
+                    Console.Write($"{rowLetter}{colNumber}{seats[i,j]} ");
+                }
                 Console.WriteLine();
-                Console.Write("Enter number: ");
-                int num = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine();
-
-                if (num > MAX || num < MIN)
-                {
-                    Console.WriteLine($"Guess must be between {MIN} to {MAX}");
-                }
-                else if (num > secretNum)
-                {
-                    Console.WriteLine("Too High. Try again");
-                }
-                else if (num < secretNum)
-                {
-                    Console.WriteLine("Too Low. Try again");
-                }
-                
-                else
-                {
-                    Console.Clear();
-                    Console.WriteLine("Correct!");
-                    Console.WriteLine($"The number is {secretNum}");
-                    Console.WriteLine($"Number of guesses: {count + 1}");
-
-                    Console.WriteLine("Enter m to back to menu");
-                    Console.Write("Do you want to continue?(y/n): ");
-                    string again = Console.ReadLine().ToLower();
-
-                    switch (again)
-                    {
-                        case "m":
-                            Console.Clear();
-                            return;
-                        case "y":
-                            secretNum = rnd.Next(MIN, MAX + 1);
-                            count = 0;
-                            Console.Clear();
-                            break;
-                        case "n":
-                            Console.WriteLine("BYE");
-                            running = false;
-                            break;
-                        default:
-                            Console.WriteLine("Invalid input");
-                            running = false;
-                            break;
-                    }
-                }
-                count++;
-
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
 
-        
-    }
-
-    static void Medium()
-    {
-        int count = 0;
-        const int MIN = 1;
-        const int MAX = 50;
-
-        int secretNum = rnd.Next(MIN, MAX + 1);
-        bool running = true;
-        Console.WriteLine("DIFFICULTY: MEDIUM");
-
-        while (running)
-        {
             try
             {
-                Console.WriteLine();
-                Console.Write("Enter number: ");
-                int num = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine();
+                Console.Write("Enter row: ");
+                string input = Console.ReadLine().ToUpper();
 
-                if (num > MAX || num < MIN)
-                {
-                    Console.WriteLine($"Guess must be between {MIN} to {MAX}");
-                }
-                else if (num > secretNum)
-                {
-                    Console.WriteLine("Too High. Try again");
-                }
-                else if (num < secretNum)
-                {
-                    Console.WriteLine("Too Low. Try again");
-                }
+                char rowChar = input[0];
+                int col = Convert.ToInt32(input[1].ToString());
 
+                int row = rowChar - 'A';
+                col = col - 1;
+
+                count--;
+
+                if (seats[row, col] == "x")
+                {
+                    Console.WriteLine("This seat already booked!");
+                }
                 else
                 {
-                    Console.Clear();
-                    Console.WriteLine("Correct!");
-                    Console.WriteLine($"The number is {secretNum}");
-                    Console.WriteLine($"Number of guesses: {count + 1}");
-
-                    Console.WriteLine("Enter m to back to menu");
-                    Console.Write("Do you want to continue?(y/n): ");
-                    string again = Console.ReadLine().ToLower();
-
-                    switch (again)
-                    {
-                        case "m":
-                            Console.Clear();
-                            return;
-                        case "y":
-                            secretNum = rnd.Next(MIN, MAX + 1);
-                            count = 0;
-                            Console.Clear();
-                            break;
-                        case "n":
-                            Console.WriteLine("BYE");
-                            running = false;
-                            break;
-                        default:
-                            Console.WriteLine("Invalid input");
-                            running = false;
-                            break;
-                    }
+                    seats[row, col] = "x";
+                    Console.WriteLine("Seat is booked!");
                 }
-                count++;
-
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(e.Message);
             }
 
-
-        }
-    }
-
-    static void Hard()
-    {
-        int count = 1;
-        const int MIN = 1;
-        const int MAX = 100;
-
-        int secretNum = rnd.Next(MIN, MAX + 1);
-        bool running = true;
-        Console.WriteLine("DIFFICULTY: HARD");
-
-        while (running)
-        {
-            try
-            {
-                Console.WriteLine();
-                Console.Write("Enter number: ");
-                int num = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine();
-
-                if (num > MAX || num < MIN)
-                {
-                    Console.WriteLine($"Guess must be between {MIN} to {MAX}");
-                }
-                else if (num > secretNum)
-                {
-                    Console.WriteLine("Too High. Try again");
-                }
-                else if (num < secretNum)
-                {
-                    Console.WriteLine("Too Low. Try again");
-                }
-
-                else
-                {
-                    Console.Clear();
-                    Console.WriteLine("Correct!");
-                    Console.WriteLine($"The number is {secretNum}");
-                    Console.WriteLine($"Number of guesses: {count + 1}");
-
-                    Console.WriteLine("Enter m to back to menu");
-                    Console.Write("Do you want to continue?(y/n): ");
-                    string again = Console.ReadLine().ToLower();
-
-                    switch (again)
-                    {
-                        case "m":
-                            Console.Clear();
-                            return;
-                        case "y":
-                            secretNum = rnd.Next(MIN, MAX + 1);
-                            count = 0;
-                            Console.Clear();
-                            break;
-                        case "n":
-                            Console.WriteLine("BYE");
-                            running = false;
-                            break;
-                        default:
-                            Console.WriteLine("Invalid input");
-                            running = false;
-                            break;
-                    }
-                }
-                count++;
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-
+            Console.WriteLine($"Seat count {count}");
+            Console.WriteLine("Press any key to continue....");
+            Console.ReadKey();
         }
     }
 }
