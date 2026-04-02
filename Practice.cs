@@ -1,37 +1,39 @@
 ﻿using System;
-using System.Threading;
+using System.Data.SqlTypes;
+using System.Net;
+using System.Runtime.ExceptionServices;
 
-class Prorgam
+class Practice
 {
+    static int rows = 5;
+    static int cols = 5;
+    static string[,] seats = new string[rows, cols];
+    static bool running = true;
+    static string input = "";
     static void Main()
     {
-        int rows = 5;
-        int cols = 5;
         int count = 25;
 
-        string[,] seats = new string[rows, cols];
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                seats[i, j] = "O"; // O = available
+            }
+        }
 
-        while (true)
+        while (running)
         {
             Console.Clear();
 
-            Console.WriteLine("=====Seating=====");
-            for (int i = 0;i < rows; i++)
-            {
-                for (int j = 0;j < cols; j++)
-                {
-                    char rowLetter = (char)('A' + i);
-                    int colNumber = j + 1;
-
-                    Console.Write($"{rowLetter}{colNumber}{seats[i,j]} ");
-                }
-                Console.WriteLine();
-            }
+            Seats();
 
             try
             {
-                Console.Write("Enter row: ");
-                string input = Console.ReadLine().ToUpper();
+                Console.WriteLine("O = Available | X = Taken");
+
+                Console.Write("Enter seats (e.g A1): ");
+                input = Console.ReadLine().ToUpper();
 
                 char rowChar = input[0];
                 int col = Convert.ToInt32(input[1].ToString());
@@ -39,26 +41,68 @@ class Prorgam
                 int row = rowChar - 'A';
                 col = col - 1;
 
-                count--;
-
-                if (seats[row, col] == "x")
+                if (row < 0 || row >= rows || col < 0 || col >= cols)
                 {
-                    Console.WriteLine("This seat already booked!");
+                    Console.WriteLine("Invalid seat");
+                }
+                else if (seats[row, col] == "X")
+                {
+                    Console.WriteLine("Seat already booked");
                 }
                 else
                 {
-                    seats[row, col] = "x";
-                    Console.WriteLine("Seat is booked!");
+                    seats[row, col] = "X";
+                    count--;
+                    Console.WriteLine("Seat booked!");
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
 
-            Console.WriteLine($"Seat count {count}");
-            Console.WriteLine("Press any key to continue....");
-            Console.ReadKey();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
+            Console.WriteLine($"Seat count: {count}");
+            Console.WriteLine($"Seat: {input}");
+
+            Again();
+        }
+    }
+
+    static void Seats()
+    {
+        Console.WriteLine("SEATING");
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0;  j < cols; j++)
+            {
+                char rowLetter = (char)('A' + i);
+                int colNum = j + 1;
+
+                Console.Write($"{rowLetter}{colNum,2}({seats[i, j]})");
+            }
+            Console.WriteLine();
+        }
+    }
+    static void Again()
+    {   
+        Console.WriteLine("M = menu");
+        Console.WriteLine("E = exit");
+        Console.Write("Enter choice: ");
+        string choice = Console.ReadLine().ToUpper();
+
+        switch (choice)
+        {
+            case "M":
+                return;
+            case "E":
+                Console.WriteLine("Exiting.....");
+                running = false;
+                break;
+            default:
+                Console.WriteLine("Invalid input");
+                break;
         }
     }
 }
